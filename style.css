@@ -1,0 +1,267 @@
+/* ── リセット & カスタムプロパティ ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #f5f5f7;
+  --surface:    #ffffff;
+  --surface2:   #f0f0f2;
+  --border:     #e0e0e5;
+  --text:       #1a1a2e;
+  --text-muted: #888899;
+  --accent:     #6366f1;
+  --accent-h:   #4f46e5;
+  --done-color: #a0a0b0;
+  --danger:     #ef4444;
+  --radius:     12px;
+  --shadow:     0 4px 24px rgba(0,0,0,.08);
+  --transition: .2s ease;
+}
+
+[data-theme="dark"] {
+  --bg:         #0f0f1a;
+  --surface:    #1a1a2e;
+  --surface2:   #24243e;
+  --border:     #2e2e4e;
+  --text:       #e8e8f0;
+  --text-muted: #6666aa;
+  --shadow:     0 4px 24px rgba(0,0,0,.4);
+}
+
+/* ── レイアウト ── */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 16px 80px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.container {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* ── ヘッダー ── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  background: linear-gradient(135deg, var(--accent), #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#theme-toggle {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform var(--transition), background var(--transition);
+}
+#theme-toggle:hover { transform: rotate(20deg) scale(1.1); }
+
+/* ── 入力エリア ── */
+.input-area {
+  display: flex;
+  gap: 10px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+#todo-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1rem;
+  background: var(--surface2);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+#todo-input::placeholder { color: var(--text-muted); }
+#todo-input:focus { border-color: var(--accent); background: var(--surface); }
+
+#add-btn {
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition), transform var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#add-btn:hover { background: var(--accent-h); transform: scale(1.05); }
+#add-btn:active { transform: scale(.97); }
+
+/* ── フィルター ── */
+.filters {
+  display: flex;
+  gap: 4px;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-btn {
+  padding: 6px 16px;
+  font-size: .85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.filter-btn:hover { background: var(--surface2); color: var(--text); }
+.filter-btn.active { background: var(--accent); color: #fff; }
+
+/* ── TODOリスト ── */
+#todo-list {
+  list-style: none;
+  min-height: 60px;
+}
+
+#todo-list:empty::after {
+  content: "タスクがありません";
+  display: block;
+  text-align: center;
+  color: var(--text-muted);
+  padding: 40px 0;
+  font-size: .95rem;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition), opacity var(--transition);
+  animation: slideIn .2s ease;
+}
+.todo-item:last-child { border-bottom: none; }
+.todo-item:hover { background: var(--surface2); }
+.todo-item.done { opacity: .6; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* チェックボックス */
+.todo-check {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  color: #fff;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  background: transparent;
+}
+.todo-check:hover { border-color: var(--accent); transform: scale(1.1); }
+.done .todo-check { background: var(--accent); border-color: var(--accent); }
+
+/* テキスト */
+.todo-text {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-break: break-word;
+  cursor: text;
+  outline: none;
+  border-radius: 4px;
+  padding: 2px 4px;
+  transition: background var(--transition);
+}
+.todo-text:focus { background: var(--surface2); }
+.done .todo-text { text-decoration: line-through; color: var(--done-color); }
+
+/* 削除ボタン */
+.todo-delete {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: 6px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition), background var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.todo-item:hover .todo-delete { opacity: 1; }
+.todo-delete:hover { color: var(--danger); background: rgba(239,68,68,.1); }
+
+/* ── フッター ── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-top: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+#remaining {
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+
+#clear-done {
+  font-size: .82rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color var(--transition), background var(--transition);
+}
+#clear-done:hover { color: var(--danger); background: rgba(239,68,68,.1); }
+
+/* ── レスポンシブ ── */
+@media (max-width: 480px) {
+  body { padding: 0; align-items: flex-start; }
+  .container { border-radius: 0; min-height: 100vh; box-shadow: none; }
+  header { padding: 20px 16px 16px; }
+  .input-area, .filters, .footer { padding-left: 16px; padding-right: 16px; }
+  .todo-item { padding-left: 16px; padding-right: 16px; }
+  .todo-delete { opacity: 1; }
+}
